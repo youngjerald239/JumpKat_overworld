@@ -11,6 +11,13 @@ class Node(pygame.sprite.Sprite):
             self.image.fill('grey')
         self.rect = self.image.get_rect(center = pos)
 
+class Icon(pygame.sprite.Sprite):
+    def __init__(self,pos):
+        super().__init__()
+        self.image = pygame.Surface((20,20))
+        self.image.fill('blue')
+        self.rect = self.image.get_rect(center = pos)
+
 class Overworld:
     def __init__(self,start_level,max_level,surface):
 
@@ -21,6 +28,7 @@ class Overworld:
 
         # sprites
         self.setup_nodes()
+        self.setup_icon()
 
     def setup_nodes(self):
         self.nodes = pygame.sprite.Group()
@@ -34,9 +42,16 @@ class Overworld:
             self.nodes.add(node_sprite)
 
     def draw_paths(self):
-        points = [node['node_pos'] for node in levels.values()]
+        points = [node['node_pos'] for index,node in enumerate(levels.values()) if index <= self.max_level]
         pygame.draw.lines(self.display_surface,'red',False,points,6)
 
+    def setup_icon(self):
+        self.icon = pygame.sprite.GroupSingle()
+        icon_sprite = Icon(self.nodes.sprites()[self.current_level].rect.center)
+        self.icon.add(icon_sprite)
+
     def run(self):
-        self.nodes.draw(self.display_surface)
         self.draw_paths()
+        self.nodes.draw(self.display_surface)
+        self.icon.draw(self.display_surface)
+        
