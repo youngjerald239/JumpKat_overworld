@@ -1,9 +1,17 @@
 import pygame,sys
 from settings import *
 
+class Game:
+    def __init__(self):
+        self.overworld = Overworld()
+
+    def run(self):
+        self.overworld.run()
+
 pygame.init()
 screen = pygame.display.set_mode((screen_width,screen_height))
 clock = pygame.time.Clock()
+game = Game()
 
 
 while True:
@@ -13,6 +21,7 @@ while True:
             sys.exit()
 
     screen.fill('black')
+    game.run()
 
     pygame.display.update()
     clock.tick(60)
